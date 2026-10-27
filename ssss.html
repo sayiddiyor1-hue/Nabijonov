@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustoz Smart Steps Learning Center — Marg'ilon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1e35;
+    --navy-2:#152d4c;
+    --navy-3:#1e3a61;
+    --gold:#c19a52;
+    --gold-light:#e0c284;
+    --cream:#f8f4ed;
+    --cream-2:#f0ead9;
+    --ink:#1c2530;
+    --muted:#6b6558;
+    --red:#a8202f;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif; background:var(--cream); color:var(--ink); overflow-x:hidden;}
+  h1,h2,h3{font-family:'Spectral',serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 6vw;
+    background:rgba(11,30,53,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(224,194,132,0.15);
+  }
+  .brand{display:flex; align-items:center; gap:10px; color:var(--cream); font-weight:700; font-size:1.15rem;}
+  .brand svg{flex-shrink:0;}
+  .brand small{display:block; font-family:'IBM Plex Mono',monospace; font-weight:400; font-size:0.62rem; color:var(--gold-light); letter-spacing:0.12em; margin-top:1px;}
+  .nav-links{display:flex; gap:2rem;}
+  .nav-links a{color:#c8cfd9; font-size:0.9rem; font-weight:500; transition:color 0.2s;}
+  .nav-links a:hover{color:var(--gold-light);}
+  .nav-cta{
+    display:flex; align-items:center; gap:8px;
+    background:var(--gold); color:var(--navy); padding:9px 18px;
+    border-radius:3px; font-weight:700; font-size:0.88rem;
+    transition:transform 0.15s, background 0.2s;
+  }
+  .nav-cta:hover{background:var(--gold-light); transform:translateY(-1px);}
+  .burger{display:none; color:var(--cream); font-size:1.5rem; cursor:pointer; background:none; border:none;}
+
+  /* ---------- HERO ---------- */
+  header{
+    position:relative; min-height:100vh; background:var(--navy); color:var(--cream);
+    display:flex; align-items:center; padding:110px 6vw 60px;
+    overflow:hidden;
+  }
+  header::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(ellipse 55% 60% at 88% 15%, rgba(193,154,82,0.14), transparent 60%),
+                radial-gradient(ellipse 45% 45% at 5% 95%, rgba(193,154,82,0.08), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:3rem; align-items:center; width:100%; position:relative; z-index:1;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; color:var(--gold-light); letter-spacing:0.16em; text-transform:uppercase;
+    font-size:0.74rem; margin-bottom:1.3rem;
+    opacity:0; animation:fadeUp 0.7s ease forwards;
+  }
+  .hero-title{
+    font-size:clamp(2.2rem, 4.6vw, 3.6rem); line-height:1.12; font-weight:700; margin-bottom:1.4rem;
+    opacity:0; animation:fadeUp 0.8s ease 0.15s forwards;
+  }
+  .hero-title .accent{color:var(--gold-light); font-style:italic;}
+  .hero-sub{
+    max-width:48ch; color:#b7bfcb; font-size:1.03rem; line-height:1.7; margin-bottom:2.2rem;
+    opacity:0; animation:fadeUp 0.8s ease 0.3s forwards;
+  }
+  .hero-ctas{display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:3rem;
+    opacity:0; animation:fadeUp 0.8s ease 0.45s forwards;}
+  .btn-primary{
+    background:var(--gold); color:var(--navy); padding:14px 28px; border-radius:3px; font-weight:700;
+    font-size:0.95rem; transition:transform 0.15s, background 0.2s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary:hover{background:var(--gold-light); transform:translateY(-2px);}
+  .btn-ghost{
+    border:1px solid rgba(248,244,237,0.3); color:var(--cream); padding:13px 26px; border-radius:3px;
+    font-weight:500; font-size:0.95rem; transition:border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover{border-color:var(--gold); background:rgba(193,154,82,0.08);}
+
+  .stat-row{display:flex; gap:2.4rem; flex-wrap:wrap; border-top:1px solid rgba(248,244,237,0.12); padding-top:1.8rem;
+    opacity:0; animation:fadeUp 0.8s ease 0.6s forwards;}
+  .stat b{font-family:'IBM Plex Mono',monospace; font-size:1.7rem; color:var(--gold-light); display:block; font-weight:600;}
+  .stat span{font-size:0.78rem; color:#8891a0;}
+
+  @keyframes fadeUp{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- HERO STEPS GRAPHIC ---------- */
+  .steps-visual{
+    position:relative; opacity:0; animation:fadeUp 1s ease 0.5s forwards;
+  }
+  .steps-visual svg{width:100%; height:auto;}
+  .step-label{font-family:'IBM Plex Mono',monospace; font-size:11px; fill:#b7bfcb;}
+  .step-label-strong{font-family:'Inter',sans-serif; font-size:13px; font-weight:700; fill:var(--cream);}
+
+  /* ---------- SUZANI DIVIDER ---------- */
+  .suzani-strip{
+    height:14px; width:100%;
+    background:
+      repeating-linear-gradient(45deg, var(--red) 0 6px, transparent 6px 12px),
+      linear-gradient(90deg, var(--navy), var(--navy));
+    opacity:0.9;
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:6.5rem 6vw;}
+  .section-head{max-width:56ch; margin-bottom:3.2rem;}
+  .section-eyebrow{
+    font-family:'IBM Plex Mono',monospace; color:var(--red); text-transform:uppercase; letter-spacing:0.16em;
+    font-size:0.74rem; margin-bottom:0.9rem; display:flex; align-items:center; gap:0.6rem;
+  }
+  .section-eyebrow::before{content:""; width:22px; height:1px; background:var(--red);}
+  .section-head h2{font-size:clamp(1.8rem, 3.2vw, 2.5rem); font-weight:700; line-height:1.15; color:var(--navy);}
+  .section-head p{margin-top:1rem; color:var(--muted); font-size:1.02rem; line-height:1.7;}
+  .center-head{text-align:center; margin-left:auto; margin-right:auto;}
+  .center-head .section-eyebrow{justify-content:center;}
+  .center-head .section-eyebrow::before{display:none;}
+
+  /* ---------- COURSES (ascending step pillars) ---------- */
+  #courses{background:var(--cream);}
+  .pillar-grid{display:grid; grid-template-columns:1fr 1fr; gap:2rem;}
+  .pillar{
+    background:#fff; border:1px solid var(--cream-2); border-radius:6px; padding:2.4rem;
+    box-shadow:0 1px 3px rgba(11,30,53,0.05);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .pillar:hover{transform:translateY(-6px); box-shadow:0 24px 44px -18px rgba(11,30,53,0.18);}
+  .pillar-icon{
+    width:52px; height:52px; border-radius:50%; background:var(--navy); color:var(--gold-light);
+    display:flex; align-items:center; justify-content:center; margin-bottom:1.4rem; font-size:1.4rem;
+  }
+  .pillar h3{font-size:1.5rem; color:var(--navy); margin-bottom:0.6rem;}
+  .pillar > p{color:var(--muted); font-size:0.96rem; line-height:1.65; margin-bottom:1.6rem;}
+  .subgroup{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0.9rem 0; border-top:1px dashed var(--cream-2);
+  }
+  .subgroup:first-of-type{border-top:1px solid var(--cream-2); margin-top:0.4rem;}
+  .subgroup .name{font-weight:600; font-size:0.95rem; color:var(--ink);}
+  .subgroup .name small{display:block; font-weight:400; color:var(--muted); font-size:0.78rem; margin-top:2px;}
+  .subgroup .price{font-family:'IBM Plex Mono',monospace; color:var(--red); font-weight:600; font-size:0.92rem; white-space:nowrap;}
+  .badge{
+    display:inline-block; background:var(--cream-2); color:var(--navy); font-size:0.72rem; font-weight:600;
+    padding:3px 10px; border-radius:20px; margin-top:1rem; font-family:'IBM Plex Mono',monospace;
+  }
+
+  /* ---------- YUTUQLAR (trust strip) ---------- */
+  #trust{background:var(--navy); color:var(--cream);}
+  #trust .section-head h2{color:var(--cream);}
+  #trust .section-head p{color:#b7bfcb;}
+  .trust-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1.6rem;}
+  .trust-card{
+    background:var(--navy-2); border:1px solid rgba(224,194,132,0.12); border-radius:6px; padding:1.8rem 1.6rem;
+  }
+  .trust-card .num{font-family:'IBM Plex Mono',monospace; font-size:2rem; font-weight:600; color:var(--gold-light); margin-bottom:0.5rem;}
+  .trust-card .label{font-size:0.9rem; color:#c8cfd9; line-height:1.5;}
+  .cities-row{margin-top:2.4rem; padding-top:2rem; border-top:1px solid rgba(224,194,132,0.12); text-align:center;}
+  .cities-label{display:block; font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:#8891a0; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1rem;}
+  .city-chips{display:flex; flex-wrap:wrap; gap:0.7rem; justify-content:center;}
+  .city-chip{background:var(--navy-2); border:1px solid rgba(224,194,132,0.2); color:var(--cream); padding:8px 16px; border-radius:20px; font-size:0.85rem;}
+
+  /* ---------- NARXLAR ---------- */
+  #pricing{background:var(--cream-2);}
+  .price-table{width:100%; border-collapse:collapse; background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 1px 3px rgba(11,30,53,0.06);}
+  .price-table th{
+    text-align:left; padding:1rem 1.4rem; background:var(--navy); color:var(--gold-light);
+    font-family:'IBM Plex Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:600;
+  }
+  .price-table td{padding:1.1rem 1.4rem; border-top:1px solid var(--cream-2); font-size:0.95rem;}
+  .price-table tr:hover td{background:#faf7f0;}
+  .price-table td.dir{font-weight:600; color:var(--navy);}
+  .price-table td.amount{font-family:'IBM Plex Mono',monospace; color:var(--red); font-weight:700; text-align:right;}
+  .table-wrap{overflow-x:auto; border-radius:6px;}
+  .pricing-cols{display:grid; grid-template-columns:1.2fr 1fr; gap:2rem; align-items:start;}
+  .price-subhead{font-size:1.05rem; color:var(--navy); margin-bottom:1rem; display:flex; align-items:baseline; gap:0.6rem;}
+  .price-subhead span{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--muted); font-weight:400; text-transform:uppercase; letter-spacing:0.05em;}
+  .individual-card{background:var(--navy); color:var(--cream); border-radius:6px; padding:1.8rem 2rem;}
+  .ind-row{display:flex; justify-content:space-between; align-items:center; padding:1rem 0; border-top:1px dashed rgba(224,194,132,0.2);}
+  .ind-row:first-of-type{border-top:none;}
+  .ind-name{font-weight:600; font-size:0.98rem;}
+  .ind-name small{display:block; font-weight:400; color:#b7bfcb; font-size:0.78rem; margin-top:2px;}
+  .ind-price{font-family:'IBM Plex Mono',monospace; color:var(--gold-light); font-weight:700; font-size:1.05rem; text-align:right; white-space:nowrap;}
+  .ind-price small{display:block; font-weight:400; color:#8891a0; font-size:0.68rem;}
+  .ind-note{margin-top:1.2rem; font-size:0.82rem; color:#b7bfcb; line-height:1.6; border-top:1px solid rgba(224,194,132,0.15); padding-top:1rem;}
+
+  /* ---------- JADVAL (schedule note) ---------- */
+  #schedule{background:var(--cream);}
+  .schedule-card{
+    display:flex; align-items:center; gap:2rem; background:#fff; border:1px solid var(--cream-2);
+    border-radius:8px; padding:2.2rem 2.4rem; flex-wrap:wrap;
+  }
+  .schedule-days{display:flex; gap:1rem;}
+  .day-chip{
+    background:var(--navy); color:var(--gold-light); font-family:'IBM Plex Mono',monospace; font-weight:600;
+    padding:14px 22px; border-radius:6px; font-size:1rem; text-align:center;
+  }
+  .day-chip span{display:block; font-size:0.65rem; color:#8891a0; font-weight:400; margin-top:3px; text-transform:uppercase; letter-spacing:0.06em;}
+  .schedule-text{flex:1; min-width:220px;}
+  .schedule-text h3{color:var(--navy); font-size:1.3rem; margin-bottom:0.5rem;}
+  .schedule-text p{color:var(--muted); font-size:0.95rem; line-height:1.6;}
+  .schedule-note{margin-top:1.2rem; font-size:0.9rem; color:var(--muted); font-style:italic;}
+
+  /* ---------- KITOB BUYURTMA FORMASI ---------- */
+  .book-order-card{
+    background:#fff; border:1px solid var(--cream-2); border-radius:8px; padding:2.2rem 2.4rem;
+    margin-top:2.2rem; box-shadow:0 1px 3px rgba(11,30,53,0.05);
+  }
+  .book-order-card h3{color:var(--navy); font-size:1.25rem; margin-bottom:0.4rem;}
+  .book-order-card > p{color:var(--muted); font-size:0.92rem; margin-bottom:1.6rem; line-height:1.6;}
+  .book-order-row{display:grid; grid-template-columns:1fr 1fr; gap:1.2rem;}
+  .book-order-card .field{margin-bottom:1.1rem;}
+  .book-order-card .field label{display:block; font-size:0.78rem; color:var(--muted); margin-bottom:0.4rem; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:0.04em;}
+  .book-order-card .field input, .book-order-card .field select{
+    width:100%; padding:11px 13px; background:var(--cream); border:1px solid var(--cream-2); border-radius:5px;
+    color:var(--ink); font-size:0.92rem; font-family:'Inter',sans-serif;
+  }
+  .book-order-card .field input:focus, .book-order-card .field select:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  .book-order-card .submit-btn{
+    width:100%; background:var(--gold); color:var(--navy); border:none; padding:14px; border-radius:5px;
+    font-weight:700; font-size:0.95rem; transition:background 0.2s, transform 0.15s;
+  }
+  .book-order-card .submit-btn:hover{background:var(--gold-light); transform:translateY(-1px);}
+  .book-order-card .submit-btn:disabled{opacity:0.6; cursor:not-allowed; transform:none;}
+  .book-order-success{display:none; text-align:center; padding:1rem 0;}
+  .book-order-success .check{
+    display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%;
+    background:var(--navy); color:var(--gold-light); font-size:1.3rem; margin-bottom:0.8rem;
+  }
+  .book-order-success h4{color:var(--navy); font-size:1.1rem; margin-bottom:0.4rem;}
+  .book-order-success p{color:var(--muted); font-size:0.9rem;}
+  .book-order-error{color:var(--red); font-size:0.85rem; margin-top:0.8rem; text-align:center; line-height:1.5; display:none;}
+  @media (max-width:600px){
+    .book-order-row{grid-template-columns:1fr;}
+  }
+
+  /* ---------- MANZIL & ALOQA ---------- */
+  #contact{background:var(--navy); color:var(--cream);}
+  #contact .section-head h2{color:var(--cream);}
+  #contact .section-head p{color:#b7bfcb;}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:2.5rem;}
+  .contact-card{background:var(--navy-2); border:1px solid rgba(224,194,132,0.15); border-radius:8px; padding:2.2rem;}
+  .contact-card h3{font-size:1.15rem; margin-bottom:1.2rem; color:var(--gold-light);}
+  .info-row{display:flex; gap:1rem; padding:0.9rem 0; border-top:1px solid rgba(224,194,132,0.1); font-size:0.95rem;}
+  .info-row:first-of-type{border-top:none;}
+  .info-row b{font-family:'IBM Plex Mono',monospace; color:var(--gold-light); min-width:6rem; font-size:0.78rem; padding-top:2px;}
+  .info-row span{color:#dfe3ea; line-height:1.5;}
+  .map-btn{
+    display:inline-flex; align-items:center; gap:8px; margin-top:1.4rem; color:var(--gold-light);
+    font-size:0.9rem; font-weight:600; border-bottom:1px solid rgba(224,194,132,0.35); padding-bottom:2px;
+  }
+  .phone-big{font-family:'IBM Plex Mono',monospace; font-size:2rem; color:var(--gold-light); font-weight:600; margin-bottom:1.4rem; word-break:break-word;}
+  .contact-btns{display:flex; gap:1rem; flex-wrap:wrap;}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  /* ---------- FLOATING CALL BUTTON (mobile) ---------- */
+  .float-call{
+    display:none; position:fixed; bottom:18px; right:18px; z-index:200;
+    background:var(--gold); color:var(--navy); width:56px; height:56px; border-radius:50%;
+    align-items:center; justify-content:center; font-size:1.4rem; box-shadow:0 10px 24px rgba(11,30,53,0.35);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:#081527; color:#8891a0; padding:2.6rem 6vw 1.8rem;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.5rem; font-size:0.85rem;
+    border-top:1px solid rgba(224,194,132,0.08);
+  }
+  footer .brand{margin-bottom:0.4rem;}
+  footer .cols{display:flex; gap:3.5rem; flex-wrap:wrap;}
+  footer .cols div h4{color:var(--cream); font-family:'IBM Plex Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.7rem;}
+  footer .cols div a, footer .cols div p{display:block; margin-bottom:0.4rem;}
+  footer .cols div a:hover{color:var(--gold-light);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:980px){
+    .hero-grid{grid-template-columns:1fr;}
+    .steps-visual{max-width:420px; margin:0 auto;}
+    .pillar-grid{grid-template-columns:1fr;}
+    .trust-grid{grid-template-columns:1fr 1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:720px){
+    .nav-links{
+      position:fixed; top:60px; right:0; left:0; background:var(--navy);
+      flex-direction:column; padding:1.4rem 6vw; gap:1.1rem;
+      transform:translateY(-120%); transition:transform 0.3s ease; border-bottom:1px solid rgba(224,194,132,0.12);
+    }
+    .nav-links.open{transform:translateY(0);}
+    .nav-cta{display:none;}
+    .burger{display:block;}
+    section{padding:4rem 6vw;}
+    .trust-grid{grid-template-columns:1fr 1fr;}
+    .float-call{display:flex;}
+    .schedule-card{flex-direction:column; align-items:flex-start;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- ENTRY GATE ---------- */
+  body.gate-active{overflow:hidden;}
+  .gate-overlay{
+    position:fixed; inset:0; z-index:1000; background:rgba(11,30,53,0.72); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    opacity:1; transition:opacity 0.35s ease;
+  }
+  .gate-overlay.gate-hidden{opacity:0; pointer-events:none;}
+  .gate-card{
+    background:var(--cream); border-radius:10px; padding:2.4rem 2.2rem; max-width:480px; width:100%;
+    max-height:92vh; overflow-y:auto; box-shadow:0 30px 70px -20px rgba(0,0,0,0.5);
+  }
+  .gate-brand{display:flex; align-items:center; gap:8px; font-weight:700; color:var(--navy); font-size:0.95rem; margin-bottom:1.2rem;}
+  .gate-brand svg path{stroke:var(--navy);}
+  .gate-card h2{font-size:1.5rem; color:var(--navy); margin-bottom:0.6rem;}
+  .gate-sub{color:var(--muted); font-size:0.92rem; line-height:1.6; margin-bottom:1.6rem;}
+  .gate-row{display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
+  .gate-card .field{margin-bottom:1rem;}
+  .gate-card .field label{display:block; font-size:0.78rem; color:var(--muted); margin-bottom:0.4rem; font-family:'IBM Plex Mono',monospace;}
+  .gate-card .field input, .gate-card .field select{
+    width:100%; padding:11px 12px; background:#fff; border:1px solid var(--cream-2); border-radius:4px;
+    color:var(--ink); font-family:'Inter',sans-serif; font-size:0.92rem;
+  }
+  .gate-card .field input:focus, .gate-card .field select:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  .gate-card .submit-btn{
+    width:100%; background:var(--gold); color:var(--navy); border:none; padding:14px; border-radius:4px;
+    font-weight:700; font-size:0.98rem; cursor:pointer; transition:background 0.2s, transform 0.15s; margin-top:0.3rem;
+  }
+  .gate-card .submit-btn:hover{background:var(--gold-light); transform:translateY(-1px);}
+  .gate-skip{
+    display:block; margin:1.3rem auto 0; background:none; border:none; color:var(--muted);
+    font-size:0.85rem; text-decoration:underline; cursor:pointer;
+  }
+  .gate-success{display:none; text-align:center; padding:1rem 0;}
+  .gate-success .check{font-size:2.4rem; color:var(--gold); display:block; margin-bottom:0.6rem;}
+  .gate-success h3{color:var(--navy); font-size:1.3rem; margin-bottom:0.5rem;}
+  .gate-success p{color:var(--muted); font-size:0.92rem; margin-bottom:1.4rem;}
+  @media (max-width:480px){
+    .gate-row{grid-template-columns:1fr;}
+  }
+
+  /* ---------- LANGUAGE SWITCH ---------- */
+  .nav-right{display:flex; align-items:center; gap:12px;}
+  .lang-switch{display:flex; border:1px solid rgba(224,194,132,0.35); border-radius:3px; overflow:hidden;}
+  .lang-switch button{
+    background:none; border:none; color:#c8cfd9; font-family:'IBM Plex Mono',monospace;
+    font-size:0.78rem; font-weight:600; padding:7px 11px; cursor:pointer; transition:background 0.2s, color 0.2s;
+  }
+  .lang-switch button:hover{color:var(--gold-light);}
+  .lang-switch button.active{background:var(--gold); color:var(--navy);}
+  .gate-top{display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.2rem;}
+  .gate-top .gate-brand{margin-bottom:0;}
+  .gate-card .lang-switch{border-color:rgba(11,30,53,0.25);}
+  .gate-card .lang-switch button{color:var(--navy);}
+  .gate-card .lang-switch button.active{background:var(--gold); color:var(--navy);}
+  .burger{margin-left:4px;}
+  @media (max-width:1100px){
+    .nav-links{gap:1.1rem;}
+    .nav-links a{font-size:0.82rem;}
+  }
+  @media (max-width:980px){
+    .nav-cta{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="gateOverlay" class="gate-overlay">
+  <div class="gate-card">
+    <div class="gate-top">
+      <div class="gate-brand">
+        <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
+          <path d="M20 4 L34 10 V22 C34 30 28 35 20 37 C12 35 6 30 6 22 V10 Z" stroke="#e0c284" stroke-width="2" fill="none"/>
+          <path d="M13 27 L13 24 L17 24 L17 20 L21 20 L21 16 L25 16" stroke="#e0c284" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        USTOZ SMART STEPS
+      </div>
+      <div class="lang-switch" role="group" aria-label="Til / Язык / Language">
+        <button type="button" data-lang="uz">UZ</button>
+        <button type="button" data-lang="ru">RU</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </div>
+    <h2 data-ru="Добро пожаловать на сайт!" data-en="Welcome to our website!">Saytga xush kelibsiz!</h2>
+    <p class="gate-sub" data-ru="Прежде чем познакомиться с нашими курсами, вы можете оставить короткую заявку — наш администратор свяжется с вами." data-en="Before exploring our courses, you can leave a short application — our administrator will get in touch with you.">Kurslarimiz bilan tanishishdan oldin, agar xohlasangiz, qisqacha ariza qoldiring — administratorimiz siz bilan bog'lanadi.</p>
+
+    <form id="gateForm">
+      <div class="gate-row">
+        <div class="field">
+          <label data-ru="Имя и фамилия" data-en="Full name">Ism va familiya</label>
+          <input type="text" id="g_name" placeholder="Aliyev Vali" data-ph-ru="Алиев Вали" data-ph-en="John Smith" required>
+        </div>
+        <div class="field">
+          <label data-ru="Возраст ученика" data-en="Student's age">O'quvchi yoshi</label>
+          <input type="number" id="g_age" min="3" max="80" placeholder="10" required>
+        </div>
+      </div>
+      <div class="gate-row">
+        <div class="field">
+          <label data-ru="Номер телефона" data-en="Phone number">Telefon raqami</label>
+          <input type="tel" id="g_phone" placeholder="+998 90 123 45 67" required>
+        </div>
+        <div class="field">
+          <label data-ru="Направление" data-en="Course">Yo'nalish</label>
+          <select id="g_direction" required>
+            <option value="" disabled selected data-ru="Выберите" data-en="Select">Tanlang</option>
+            <option value="Mental Arifmetika — Kattalar" data-ru="Ментальная арифметика — Взрослые" data-en="Mental Arithmetic — Adults">Mental Arifmetika — Kattalar</option>
+            <option value="Mental Arifmetika — Kids" data-ru="Ментальная арифметика — Kids" data-en="Mental Arithmetic — Kids">Mental Arifmetika — Kids</option>
+            <option value="Ingliz tili — Middle group" data-ru="Английский язык — Middle group" data-en="English — Middle group">Ingliz tili — Middle group</option>
+            <option value="Ingliz tili — Kids group" data-ru="Английский язык — Kids group" data-en="English — Kids group">Ingliz tili — Kids group</option>
+            <option value="Individual dars" data-ru="Индивидуальное занятие" data-en="Individual lesson">Individual dars</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label data-ru="Группа / время занятий" data-en="Group / lesson time">Guruh / dars vaqti</label>
+        <select id="g_time" required>
+          <option value="" disabled selected data-ru="Выберите" data-en="Select">Tanlang</option>
+          <option value="Shanba, Yakshanba 10:00–12:00 (Mental Arifmetika)" data-ru="Суббота, воскресенье 10:00–12:00 (Ментальная арифметика)" data-en="Saturday, Sunday 10:00–12:00 (Mental Arithmetic)">Shanba, Yakshanba 10:00–12:00 (Mental Arifmetika)</option>
+          <option value="Shanba, Yakshanba 12:15–14:45 (Ingliz tili)" data-ru="Суббота, воскресенье 12:15–14:45 (Английский язык)" data-en="Saturday, Sunday 12:15–14:45 (English)">Shanba, Yakshanba 12:15–14:45 (Ingliz tili)</option>
+          <option value="Individual — vaqti kelishiladi" data-ru="Индивидуально — время по договорённости" data-en="Individual — time by arrangement">Individual — vaqti kelishiladi</option>
+        </select>
+      </div>
+      <button type="submit" class="submit-btn" id="gateSubmitBtn" data-ru="Отправить заявку и перейти на сайт" data-en="Submit application and enter the site">Ariza yuborish va saytga kirish</button>
+    </form>
+
+    <div id="gateSuccess" class="gate-success">
+      <span class="check">✓</span>
+      <h3 data-ru="Спасибо!" data-en="Thank you!">Rahmat!</h3>
+      <p data-ru="Ваша заявка принята. Наш администратор скоро свяжется с вами." data-en="Your application has been received. Our administrator will contact you shortly.">Arizangiz qabul qilindi. Administratorimiz tez orada bog'lanadi.</p>
+      <button class="submit-btn" id="gateContinueBtn" data-ru="Перейти на сайт →" data-en="Go to the site →">Saytga o'tish →</button>
+    </div>
+
+    <button type="button" id="gateSkip" class="gate-skip" data-ru="Посмотреть сайт без заявки →" data-en="Browse the site without applying →">Ariza qoldirmasdan saytni ko'rish →</button>
+  </div>
+</div>
+
+<nav>
+  <div class="brand">
+    <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+      <path d="M20 4 L34 10 V22 C34 30 28 35 20 37 C12 35 6 30 6 22 V10 Z" stroke="#e0c284" stroke-width="2" fill="none"/>
+      <path d="M13 27 L13 24 L17 24 L17 20 L21 20 L21 16 L25 16" stroke="#e0c284" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>USTOZ SMART STEPS<small>LEARNING CENTER</small></div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#courses" data-ru="Направления" data-en="Courses">Yo'nalishlar</a>
+    <a href="#pricing" data-ru="Цены" data-en="Prices">Narxlar</a>
+    <a href="#schedule" data-ru="Расписание" data-en="Schedule">Jadval</a>
+    <a href="#books" data-ru="Книги" data-en="Books">Kitoblar</a>
+    <a href="#contact" data-ru="Адрес" data-en="Address">Manzil</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-switch" role="group" aria-label="Til / Язык / Language">
+      <button type="button" data-lang="uz">UZ</button>
+      <button type="button" data-lang="ru">RU</button>
+        <button type="button" data-lang="en">EN</button>
+    </div>
+    <a href="tel:+998996087886" class="nav-cta">📞 +998 99 608 78 86</a>
+  </div>
+  <button class="burger" id="burgerBtn" aria-label="Menyu" data-aria-ru="Меню" data-aria-en="Menu">☰</button>
+</nav>
+
+<header>
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow" data-ru="Маргилан · Ментальная арифметика и английский язык" data-en="Margilan · Mental Arithmetic & English">Marg'ilon · Mental Arifmetika & Ingliz tili</div>
+      <h1 class="hero-title" data-ru-html="Маленькие шаги,<br><span class='accent'>большие результаты</span>" data-en-html="Small steps,<br><span class='accent'>big results</span>">Kichik qadamlar,<br><span class="accent">katta natijalar</span></h1>
+      <p class="hero-sub" data-ru="Ustoz Smart Steps Learning Center уже 4 года в Маргилане обучает детей и взрослых ментальной арифметике и английскому языку в небольших группах, с упором на результат." data-en="For 4 years, Ustoz Smart Steps Learning Center in Margilan has been teaching children and adults Mental Arithmetic and English in small, results-focused groups.">
+        Ustoz Smart Steps Learning Center — Marg'ilonda 4 yildan buyon bolalar va kattalarga
+        Mental Arifmetika hamda Ingliz tilini kichik guruhlarda, natijaga yo'naltirilgan
+        holda o'rgatib kelmoqda.
+      </p>
+      <div class="hero-ctas">
+        <a href="tel:+998996087886" class="btn-primary" data-ru="📞 Позвонить" data-en="📞 Call us">📞 Qo'ng'iroq qilish</a>
+        <a href="#courses" class="btn-ghost" data-ru="Посмотреть направления" data-en="View courses">Yo'nalishlarni ko'rish</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b data-ru="4 года" data-en="4 years">4 yil</b><span data-ru="опыта" data-en="of experience">tajriba</span></div>
+        <div class="stat"><b>250+</b><span data-ru="выпускников" data-en="graduates">bitiruvchi</span></div>
+        <div class="stat"><b>20+</b><span data-ru="международных достижений" data-en="international awards">xalqaro yutuq</span></div>
+        <div class="stat"><b>14</b><span data-ru="человек в группе" data-en="students per group">kishi/guruh</span></div>
+      </div>
+    </div>
+
+    <div class="steps-visual">
+      <svg viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="230" width="70" height="50" rx="3" fill="#152d4c" stroke="#e0c28433" />
+        <rect x="95" y="190" width="70" height="90" rx="3" fill="#1e3a61" stroke="#e0c28433" />
+        <rect x="170" y="140" width="70" height="140" rx="3" fill="#152d4c" stroke="#e0c28433" />
+        <rect x="245" y="90" width="55" height="190" rx="3" fill="#1e3a61" stroke="#e0c28433" />
+
+        <text x="55" y="222" text-anchor="middle" class="step-label-strong">Kids</text>
+        <text x="55" y="238" text-anchor="middle" class="step-label" data-ru="Англ. / М.А." data-en="Eng. / M.A.">Ingliz / M.A.</text>
+
+        <text x="130" y="182" text-anchor="middle" class="step-label-strong">Middle</text>
+        <text x="130" y="198" text-anchor="middle" class="step-label" data-ru="Английский" data-en="English">Ingliz tili</text>
+
+        <text x="205" y="132" text-anchor="middle" class="step-label-strong" data-ru="Взрослые" data-en="Adults">Kattalar</text>
+        <text x="205" y="148" text-anchor="middle" class="step-label" data-ru="Ментал. арифм." data-en="Mental Arith.">Mental Arifm.</text>
+
+        <text x="272" y="82" text-anchor="middle" class="step-label-strong" fill="#e0c284" data-ru="Междунар." data-en="International">Xalqaro</text>
+        <text x="272" y="98" text-anchor="middle" class="step-label" fill="#e0c284" data-ru="достижения" data-en="achievements">yutuqlar</text>
+
+        <circle cx="272" cy="55" r="9" fill="#c19a52"/>
+        <path d="M272 64 L272 78 M272 68 L262 74 M272 68 L282 62 M272 78 L266 90 M272 78 L280 88" stroke="#c19a52" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="suzani-strip"></div>
+
+<section id="courses">
+  <div class="section-head reveal">
+    <div class="section-eyebrow" data-ru="Направления" data-en="Courses">Yo'nalishlar</div>
+    <h2 data-ru="2 направления, у каждого — чёткие уровни" data-en="2 courses, each with clear levels">2 ta yo'nalish, har biri aniq bosqichlar bilan</h2>
+    <p data-ru="В каждой группе не более 14 учеников — это позволяет уделить внимание каждому ребёнку." data-en="Each group has no more than 14 students — so every child gets individual attention.">Har bir guruh ko'pi bilan 14 nafar o'quvchidan iborat — bu har bir bolaga individual e'tibor qaratish imkonini beradi.</p>
+  </div>
+  <div class="pillar-grid">
+
+    <div class="pillar reveal">
+      <div class="pillar-icon">🧮</div>
+      <h3 data-ru="Ментальная арифметика" data-en="Mental Arithmetic">Mental Arifmetika</h3>
+      <p data-ru="Занятия, развивающие у детей и взрослых быстрый счёт, внимание и память. В зависимости от возраста делятся на 2 группы." data-en="Lessons that develop quick calculation, attention and memory in children and adults. Split into 2 groups by age.">Bolalar va kattalarda tez hisoblash, diqqat va xotirani rivojlantiruvchi mashg'ulotlar. Yosh toifasiga qarab 2 xil guruhga bo'linadi.</p>
+      <div class="subgroup">
+        <div class="name"><span data-ru="Ментальная арифметика — Взрослые" data-en="Mental Arithmetic — Adults">Mental Arifmetika — Kattalar</span><small data-ru="Группа для взрослых" data-en="Group for adults">Katta yoshdagilar uchun guruh</small></div>
+        <div class="price" data-ru="200 000 сум/мес" data-en="200,000 UZS/month">200 000 so'm/oy</div>
+      </div>
+      <div class="subgroup">
+        <div class="name"><span data-ru="Ментальная арифметика — Kids" data-en="Mental Arithmetic — Kids">Mental Arifmetika — Kids</span><small data-ru="Группа для младших детей" data-en="Group for younger children">Kichik yoshdagi bolalar uchun guruh</small></div>
+        <div class="price" data-ru="200 000 сум/мес" data-en="200,000 UZS/month">200 000 so'm/oy</div>
+      </div>
+      <span class="badge" data-ru="До 14 учеников в группе" data-en="Up to 14 students per group">Guruhda 14 tagacha o'quvchi</span>
+    </div>
+
+    <div class="pillar reveal">
+      <div class="pillar-icon">🇬🇧</div>
+      <h3 data-ru="Английский язык" data-en="English">Ingliz tili</h3>
+      <p data-ru="Практический курс разговорной речи и грамматики от преподавателя с государственным сертификатом. По возрасту делится на 2 группы." data-en="A practical speaking and grammar course taught by a state-certified teacher. Split into 2 groups by age.">Davlat sertifikatiga ega o'qituvchi tomonidan olib boriladigan amaliy nutq va grammatika kursi. Yosh guruhiga qarab 2 turga bo'linadi.</p>
+      <div class="subgroup">
+        <div class="name"><span>English — Middle group</span><small data-ru="Для средней и старшей возрастных групп" data-en="For middle and older age groups">O'rta va katta yoshdagilar uchun</small></div>
+        <div class="price" data-ru="200 000 сум/мес" data-en="200,000 UZS/month">200 000 so'm/oy</div>
+      </div>
+      <div class="subgroup">
+        <div class="name"><span>English — Kids group</span><small data-ru="Для младших детей" data-en="For younger children">Kichik yoshdagi bolalar uchun</small></div>
+        <div class="price" data-ru="150 000 сум/мес" data-en="150,000 UZS/month">150 000 so'm/oy</div>
+      </div>
+      <span class="badge" data-ru="Преподаватель с государственным сертификатом" data-en="State-certified teacher">Davlat sertifikatiga ega o'qituvchi</span>
+    </div>
+
+  </div>
+</section>
+
+<section id="trust">
+  <div class="section-head center-head reveal" style="margin-left:auto; margin-right:auto;">
+    <div class="section-eyebrow" data-ru="Почему Ustoz Smart Steps" data-en="Why Ustoz Smart Steps">Nega Ustoz Smart Steps</div>
+    <h2 data-ru="4 года опыта — реальные результаты" data-en="4 years of experience — real results">4 yillik tajriba — real natijalar bilan</h2>
+    <p data-ru="Успехи наших учеников — наш главный показатель." data-en="Our students' success is our greatest measure.">O'quvchilarimizning muvaffaqiyati — bizning eng katta ko'rsatkichimiz.</p>
+  </div>
+  <div class="trust-grid">
+    <div class="trust-card reveal">
+      <div class="num">4</div>
+      <div class="label" data-ru="Года опыта — работаем с 2022 года" data-en="Years of experience — operating since 2022">Yillik tajriba — 2022-yildan buyon faoliyat yuritamiz</div>
+    </div>
+    <div class="trust-card reveal">
+      <div class="num">250+</div>
+      <div class="label" data-ru="Наших выпускников успешно завершили курс" data-en="Graduates who have successfully completed the course">Bitiruvchi o'quvchilarimiz kursni muvaffaqiyatli yakunlagan</div>
+    </div>
+    <div class="trust-card reveal">
+      <div class="num">20+</div>
+      <div class="label" data-ru="Учеников добились успеха на международных соревнованиях и олимпиадах" data-en="Students who achieved success at international competitions and olympiads">O'quvchi xalqaro musobaqa va olimpiadalarda muvaffaqiyatga erishgan</div>
+    </div>
+    <div class="trust-card reveal">
+      <div class="num">14</div>
+      <div class="label" data-ru="Максимум учеников в каждой группе — для индивидуального внимания" data-en="Maximum students per group — for individual attention">Har bir guruhdagi maksimal o'quvchilar soni — individual e'tibor uchun</div>
+    </div>
+  </div>
+  <div class="cities-row reveal">
+    <span class="cities-label" data-ru="Города, где наши ученики участвовали в международных соревнованиях:" data-en="Cities where our students competed internationally:">Xalqaro musobaqalarda qatnashgan shaharlar:</span>
+    <div class="city-chips">
+      <span class="city-chip"><span data-ru="🇬🇪 Тбилиси" data-en="🇬🇪 Tbilisi">🇬🇪 Tbilisi</span></span>
+      <span class="city-chip"><span data-ru="🇬🇪 Батуми" data-en="🇬🇪 Batumi">🇬🇪 Batumi</span></span>
+      <span class="city-chip"><span data-ru="🇦🇿 Баку" data-en="🇦🇿 Baku">🇦🇿 Baku</span></span>
+      <span class="city-chip"><span data-ru="🇦🇪 Дубай" data-en="🇦🇪 Dubai">🇦🇪 Dubai</span></span>
+      <span class="city-chip"><span data-ru="🇦🇪 Абу-Даби" data-en="🇦🇪 Abu Dhabi">🇦🇪 Abu-Dhabi</span></span>
+      <span class="city-chip"><span data-ru="🇹🇷 Стамбул" data-en="🇹🇷 Istanbul">🇹🇷 Istanbul</span></span>
+      <span class="city-chip"><span data-ru="🇰🇿 Алматы" data-en="🇰🇿 Almaty">🇰🇿 Almaty</span></span>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="section-head reveal">
+    <div class="section-eyebrow" data-ru="Цены" data-en="Prices">Narxlar</div>
+    <h2 data-ru="Прозрачные и понятные цены" data-en="Clear and transparent prices">Shaffof va aniq narxlar</h2>
+    <p data-ru="Ежемесячная оплата в групповых (до 14 человек) и индивидуальных занятиях:" data-en="Monthly fees for group classes (up to 14 students) and individual lessons:">Ommaviy guruhlarda (14 kishigacha) va individual darslarda oylik to'lov quyidagicha.</p>
+  </div>
+  <div class="pricing-cols">
+    <div class="reveal">
+      <h3 class="price-subhead"><b data-ru="Групповые занятия" data-en="Group classes" style="font-weight:inherit;">Ommaviy guruhlar</b> <span data-ru="до 14 человек" data-en="up to 14 students">14 kishigacha</span></h3>
+      <div class="table-wrap">
+        <table class="price-table">
+          <thead>
+            <tr><th data-ru="Направление" data-en="Course">Yo'nalish</th><th data-ru="Группа" data-en="Group">Guruh</th><th style="text-align:right;" data-ru="Цена в месяц" data-en="Price per month">Oylik narx</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="dir" data-ru="Ментальная арифметика" data-en="Mental Arithmetic">Mental Arifmetika</td><td data-ru="Взрослые" data-en="Adults">Kattalar</td><td class="amount" data-ru="200 000 сум" data-en="200,000 UZS">200 000 so'm</td></tr>
+            <tr><td class="dir" data-ru="Ментальная арифметика" data-en="Mental Arithmetic">Mental Arifmetika</td><td>Kids</td><td class="amount" data-ru="200 000 сум" data-en="200,000 UZS">200 000 so'm</td></tr>
+            <tr><td class="dir" data-ru="Английский язык" data-en="English">Ingliz tili</td><td>Middle group</td><td class="amount" data-ru="200 000 сум" data-en="200,000 UZS">200 000 so'm</td></tr>
+            <tr><td class="dir" data-ru="Английский язык" data-en="English">Ingliz tili</td><td>Kids group</td><td class="amount" data-ru="150 000 сум" data-en="150,000 UZS">150 000 so'm</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="reveal">
+      <h3 class="price-subhead"><b data-ru="Индивидуальные занятия" data-en="Individual lessons" style="font-weight:inherit;">Individual darslar</b> <span data-ru="время по договорённости" data-en="time by arrangement">vaqti kelishiladi</span></h3>
+      <div class="individual-card">
+        <div class="ind-row">
+          <div class="ind-name"><span data-ru="Ментальная арифметика" data-en="Mental Arithmetic">Mental Arifmetika</span><small data-ru="Персональное занятие, 1 человек" data-en="Personal lesson, 1 student">1 kishilik shaxsiy dars</small></div>
+          <div class="ind-price"><span data-ru="800 000 сум+" data-en="800,000+ UZS">800 000 so'm+</span><small data-ru="/мес" data-en="/month">/oy</small></div>
+        </div>
+        <div class="ind-row">
+          <div class="ind-name"><span data-ru="Английский язык" data-en="English">Ingliz tili</span><small data-ru="Персональное занятие, 1 человек" data-en="Personal lesson, 1 student">1 kishilik shaxsiy dars</small></div>
+          <div class="ind-price"><span data-ru="350 000 сум+" data-en="350,000+ UZS">350 000 so'm+</span><small data-ru="/мес" data-en="/month">/oy</small></div>
+        </div>
+        <p class="ind-note" data-ru="Время индивидуальных занятий согласуется с учеником отдельно. Точная цена зависит от количества и продолжительности занятий — позвоните, чтобы узнать подробности." data-en="The time for individual lessons is arranged separately with each student. The exact price depends on the number and length of lessons — call us for details.">Individual darslar vaqti o'quvchi bilan alohida kelishiladi. Aniq narx dars soati va davomiyligiga qarab belgilanadi — batafsil ma'lumot uchun qo'ng'iroq qiling.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="schedule">
+  <div class="section-head reveal">
+    <div class="section-eyebrow" data-ru="Дни занятий" data-en="Class days">Dars kunlari</div>
+    <h2 data-ru="Стабильные занятия по выходным" data-en="Regular weekend classes">Hafta oxirida barqaror mashg'ulotlar</h2>
+  </div>
+  <div class="table-wrap reveal">
+    <table class="price-table">
+      <thead>
+        <tr><th data-ru="Направление" data-en="Course">Yo'nalish</th><th data-ru="Дни" data-en="Days">Kunlar</th><th style="text-align:right;" data-ru="Время" data-en="Time">Vaqti</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="dir" data-ru="Ментальная арифметика" data-en="Mental Arithmetic">Mental Arifmetika</td><td data-ru="Суббота, воскресенье" data-en="Saturday, Sunday">Shanba, Yakshanba</td><td class="amount">10:00 &ndash; 12:00</td></tr>
+        <tr><td class="dir" data-ru="Английский язык" data-en="English">Ingliz tili</td><td data-ru="Суббота, воскресенье" data-en="Saturday, Sunday">Shanba, Yakshanba</td><td class="amount">12:15 &ndash; 14:45</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="schedule-note reveal" data-ru="Время индивидуальных занятий согласуется с учеником отдельно." data-en="The time for individual lessons is arranged separately with each student.">Individual darslar uchun vaqt o'quvchi bilan alohida kelishiladi.</p>
+</section>
+
+<section id="books">
+  <div class="section-head reveal">
+    <div class="section-eyebrow" data-ru="Книги" data-en="Books">Kitoblar</div>
+    <h2 data-ru="Учебники Ustoz Smart Steps" data-en="Ustoz Smart Steps textbooks">Ustoz Smart Steps darsliklari</h2>
+    <p data-ru-html="Вы можете приобрести все учебники, которые используются в нашем центре. Для покупки обращайтесь к <a href='https://t.me/Smart_steps_admin' target='_blank' rel='noopener' style='color:var(--red); font-weight:600;'>@Smart_steps_admin</a>." data-en-html="You can buy all the textbooks used at our center. To purchase, contact <a href='https://t.me/Smart_steps_admin' target='_blank' rel='noopener' style='color:var(--red); font-weight:600;'>@Smart_steps_admin</a>.">O'quv markazimizda foydalaniladigan barcha darsliklarni sotib olishingiz mumkin. Xarid uchun <a href="https://t.me/Smart_steps_admin" target="_blank" rel="noopener" style="color:var(--red); font-weight:600;">@Smart_steps_admin</a> ga murojaat qiling.</p>
+  </div>
+  <div class="pillar-grid">
+    <div class="pillar reveal">
+      <div class="pillar-icon">📘</div>
+      <h3 data-ru="Книги по ментальной арифметике" data-en="Mental Arithmetic books">Mental Arifmetika kitoblari</h3>
+      <p data-ru="Комплект из 5 книг, рассчитанный на поэтапное обучение." data-en="A set of 5 books designed for step-by-step learning.">Bosqichma-bosqich 5 ta kitobdan iborat to'plam.</p>
+      <div class="subgroup"><div class="name" data-ru="Книга 1" data-en="Book 1">1-kitob</div><div class="price" data-ru="15 000 сум" data-en="15,000 UZS">15 000 so'm</div></div>
+      <div class="subgroup"><div class="name" data-ru="Книга 2" data-en="Book 2">2-kitob</div><div class="price" data-ru="17 000 сум" data-en="17,000 UZS">17 000 so'm</div></div>
+      <div class="subgroup"><div class="name" data-ru="Книга 3" data-en="Book 3">3-kitob</div><div class="price" data-ru="21 000 сум" data-en="21,000 UZS">21 000 so'm</div></div>
+      <div class="subgroup"><div class="name" data-ru="Книга 4" data-en="Book 4">4-kitob</div><div class="price" data-ru="21 000 сум" data-en="21,000 UZS">21 000 so'm</div></div>
+      <div class="subgroup"><div class="name" data-ru="Книга 5 (итоговая)" data-en="Book 5 (final)">5-kitob (yakuniy)</div><div class="price" data-ru="25 000 сум" data-en="25,000 UZS">25 000 so'm</div></div>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-icon">📗</div>
+      <h3 data-ru="Английский язык — Round Up" data-en="English — Round Up">Ingliz tili — Round Up</h3>
+      <p data-ru="Серия Round Up — от уровня Start до части 6. Все книги по одной цене." data-en="The Round Up series, from Start level to Part 6. Every book costs the same.">Round Up seriyasi, Start darajasidan 6-qismgacha. Har bir kitob bir xil narxda.</p>
+      <div class="subgroup"><div class="name"><span>Round Up — Start / 1 / 2 / 3 / 4 / 5 / 6</span><small data-ru="Каждая" data-en="Each">Har biri</small></div><div class="price" data-ru="12 000 сум" data-en="12,000 UZS">12 000 so'm</div></div>
+      <span class="badge" data-ru="Покупка: @Smart_steps_admin" data-en="To buy: @Smart_steps_admin">Xarid: @Smart_steps_admin</span>
+    </div>
+  </div>
+  <p class="schedule-note reveal" data-ru="Примечание: после оплаты книга передаётся покупателю в течение 3 рабочих дней." data-en="Note: after payment, the book is handed over to the buyer within 3 business days.">Eslatma: kitob uchun to'lov amalga oshirilgandan so'ng, xaridorga 3 ish kunigacha bo'lgan muddatda topshiriladi.</p>
+
+  <div class="book-order-card reveal">
+    <h3 data-ru="Заказ книг" data-en="Order books">Kitob buyurtma qilish</h3>
+    <p data-ru="Закажите книги онлайн — наш администратор свяжется с вами и уточнит детали доставки." data-en="Order books online — our administrator will contact you to arrange delivery details.">Kitob(lar)ni onlayn buyurtma qiling — administratorimiz siz bilan bog'lanib, yetkazib berish tafsilotlarini kelishadi.</p>
+
+    <form id="bookOrderForm">
+      <div class="book-order-row">
+        <div class="field">
+          <label for="b_name" data-ru="Имя и фамилия" data-en="Full name">Ism va familiya</label>
+          <input type="text" id="b_name" placeholder="Aliyev Vali" data-ph-ru="Алиев Вали" data-ph-en="John Smith" required>
+        </div>
+        <div class="field">
+          <label for="b_phone" data-ru="Номер телефона" data-en="Phone number">Telefon raqami</label>
+          <input type="tel" id="b_phone" placeholder="+998 90 123 45 67" required>
+        </div>
+      </div>
+      <div class="book-order-row">
+        <div class="field">
+          <label for="b_book" data-ru="Книга" data-en="Book">Kitob</label>
+          <select id="b_book" required>
+            <option value="" disabled selected data-ru="Выберите" data-en="Select">Tanlang</option>
+            <optgroup label="Mental Arifmetika" data-label-ru="Ментальная арифметика" data-label-en="Mental Arithmetic">
+              <option value="Mental Arifmetika — 1-kitob (15 000 so'm)" data-ru="Ментальная арифметика — книга 1 (15 000 сум)" data-en="Mental Arithmetic — Book 1 (15,000 UZS)">Mental Arifmetika — 1-kitob (15 000 so'm)</option>
+              <option value="Mental Arifmetika — 2-kitob (17 000 so'm)" data-ru="Ментальная арифметика — книга 2 (17 000 сум)" data-en="Mental Arithmetic — Book 2 (17,000 UZS)">Mental Arifmetika — 2-kitob (17 000 so'm)</option>
+              <option value="Mental Arifmetika — 3-kitob (21 000 so'm)" data-ru="Ментальная арифметика — книга 3 (21 000 сум)" data-en="Mental Arithmetic — Book 3 (21,000 UZS)">Mental Arifmetika — 3-kitob (21 000 so'm)</option>
+              <option value="Mental Arifmetika — 4-kitob (21 000 so'm)" data-ru="Ментальная арифметика — книга 4 (21 000 сум)" data-en="Mental Arithmetic — Book 4 (21,000 UZS)">Mental Arifmetika — 4-kitob (21 000 so'm)</option>
+              <option value="Mental Arifmetika — 5-kitob, yakuniy (25 000 so'm)" data-ru="Ментальная арифметика — книга 5, итоговая (25 000 сум)" data-en="Mental Arithmetic — Book 5, final (25,000 UZS)">Mental Arifmetika — 5-kitob, yakuniy (25 000 so'm)</option>
+              <option value="Mental Arifmetika — to'liq to'plam (1-5)" data-ru="Ментальная арифметика — полный комплект (1–5)" data-en="Mental Arithmetic — full set (1–5)">Mental Arifmetika — to'liq to'plam (1-5)</option>
+            </optgroup>
+            <optgroup label="Ingliz tili — Round Up" data-label-ru="Английский язык — Round Up" data-label-en="English — Round Up">
+              <option value="Round Up — Start (12 000 so'm)" data-ru="Round Up — Start (12 000 сум)" data-en="Round Up — Start (12,000 UZS)">Round Up — Start (12 000 so'm)</option>
+              <option value="Round Up — 1 (12 000 so'm)" data-ru="Round Up — 1 (12 000 сум)" data-en="Round Up — 1 (12,000 UZS)">Round Up — 1 (12 000 so'm)</option>
+              <option value="Round Up — 2 (12 000 so'm)" data-ru="Round Up — 2 (12 000 сум)" data-en="Round Up — 2 (12,000 UZS)">Round Up — 2 (12 000 so'm)</option>
+              <option value="Round Up — 3 (12 000 so'm)" data-ru="Round Up — 3 (12 000 сум)" data-en="Round Up — 3 (12,000 UZS)">Round Up — 3 (12 000 so'm)</option>
+              <option value="Round Up — 4 (12 000 so'm)" data-ru="Round Up — 4 (12 000 сум)" data-en="Round Up — 4 (12,000 UZS)">Round Up — 4 (12 000 so'm)</option>
+              <option value="Round Up — 5 (12 000 so'm)" data-ru="Round Up — 5 (12 000 сум)" data-en="Round Up — 5 (12,000 UZS)">Round Up — 5 (12 000 so'm)</option>
+              <option value="Round Up — 6 (12 000 so'm)" data-ru="Round Up — 6 (12 000 сум)" data-en="Round Up — 6 (12,000 UZS)">Round Up — 6 (12 000 so'm)</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="field">
+          <label for="b_qty" data-ru="Количество (шт.)" data-en="Quantity (pcs)">Soni (dona)</label>
+          <input type="number" id="b_qty" min="1" max="20" value="1" required>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" id="bookOrderSubmitBtn" data-ru="Отправить заказ" data-en="Place order">Buyurtma yuborish</button>
+      <div class="book-order-error" id="bookOrderErrorBox"></div>
+    </form>
+
+    <div class="book-order-success" id="bookOrderSuccess">
+      <span class="check">✓</span>
+      <h4 data-ru="Ваш заказ принят!" data-en="Your order has been received!">Buyurtmangiz qabul qilindi!</h4>
+      <p data-ru="Наш администратор скоро свяжется с вами." data-en="Our administrator will contact you shortly.">Administratorimiz tez orada siz bilan bog'lanadi.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-head reveal">
+    <div class="section-eyebrow" data-ru="Адрес и контакты" data-en="Address & Contact">Manzil & Aloqa</div>
+    <h2 data-ru="Свяжитесь с нами" data-en="Get in touch">Biz bilan bog'laning</h2>
+    <p data-ru="Если у вас есть вопросы или вы хотите записаться, позвоните по номеру ниже." data-en="If you have questions or want to enroll, call the number below.">Savollaringiz bo'lsa yoki ro'yxatdan o'tmoqchi bo'lsangiz, quyidagi raqam orqali qo'ng'iroq qiling.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card reveal">
+      <h3 data-ru="Связаться по телефону" data-en="Contact by phone">Telefon orqali murojaat</h3>
+      <div class="phone-big">+998 99 608 78 86</div>
+      <div class="contact-btns">
+        <a href="tel:+998996087886" class="btn-primary" data-ru="📞 Позвонить" data-en="📞 Call us">📞 Qo'ng'iroq qilish</a>
+        <a href="https://wa.me/998996087886" class="btn-ghost" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+      <div class="info-row" style="margin-top:1.4rem;"><b>TELEGRAM</b><span><a href="https://t.me/smartstepsuz" target="_blank" rel="noopener" style="color:var(--gold-light); font-weight:600;">@smartstepsuz</a> — <span data-ru="группа" data-en="group">guruh</span></span></div>
+      <div class="info-row"><b>ADMIN</b><span><a href="https://t.me/Smart_steps_admin" target="_blank" rel="noopener" style="color:var(--gold-light); font-weight:600;">@Smart_steps_admin</a></span></div>
+    </div>
+    <div class="contact-card reveal">
+      <h3 data-ru="Адрес" data-en="Address">Manzil</h3>
+      <div class="info-row"><b data-ru="ГОРОД" data-en="CITY">SHAHAR</b><span data-ru="город Маргилан" data-en="Margilan city">Marg'ilon shahri</span></div>
+      <div class="info-row"><b data-ru="МАХАЛЛЯ" data-en="NEIGHBORHOOD">MAHALLA</b><span data-ru="массив Сой буйи" data-en="Soy Boyi district">Soy bo'yi mavzesi</span></div>
+      <div class="info-row"><b data-ru="УЛИЦА" data-en="STREET">KO'CHA</b><span data-ru="улица Томоша сой, дом 1Б" data-en="Tomosha Soy street, building 1B">Tomosha soy ko'chasi, 1B-uy</span></div>
+      <div class="info-row"><b data-ru="КООРДИНАТЫ" data-en="COORDINATES">KOORDINATA</b><span class="mono">40°27'01.5"N 71°42'56.1"E</span></div>
+      <div class="contact-btns" style="margin-top:1rem;">
+        <a href="https://www.google.com/maps?q=40.450417,71.715583" target="_blank" rel="noopener" class="map-btn" data-ru="📍 Google Карты →" data-en="📍 Google Maps →">📍 Google Xarita →</a>
+        <a href="https://yandex.com/maps/?text=40.450417,71.715583" target="_blank" rel="noopener" class="map-btn" data-ru="📍 Яндекс Карты →" data-en="📍 Yandex Maps →">📍 Yandex Xarita →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="brand" style="color:#f8f4ed;">USTOZ SMART STEPS<small style="color:#8891a0;">LEARNING CENTER</small></div>
+    <p style="margin-top:0.6rem;" data-ru="© 2026. Все права защищены." data-en="© 2026. All rights reserved.">© 2026. Barcha huquqlar himoyalangan.</p>
+  </div>
+  <div class="cols">
+    <div>
+      <h4 data-ru="Страницы" data-en="Pages">Sahifa</h4>
+      <a href="#courses" data-ru="Направления" data-en="Courses">Yo'nalishlar</a>
+      <a href="#pricing" data-ru="Цены" data-en="Prices">Narxlar</a>
+      <a href="#books" data-ru="Книги" data-en="Books">Kitoblar</a>
+      <a href="#contact" data-ru="Адрес" data-en="Address">Manzil</a>
+    </div>
+    <div>
+      <h4 data-ru="Контакты" data-en="Contact">Aloqa</h4>
+      <p>+998 99 608 78 86</p>
+      <p data-ru="Маргилан, массив Сой буйи" data-en="Margilan, Soy Boyi district">Marg'ilon, Soy bo'yi mavzesi</p>
+      <a href="https://t.me/smartstepsuz" target="_blank" rel="noopener">Telegram: @smartstepsuz</a>
+    </div>
+  </div>
+</footer>
+
+<a href="tel:+998996087886" class="float-call" aria-label="Qo'ng'iroq qilish" data-aria-ru="Позвонить" data-aria-en="Call us">📞</a>
+<script>
+  /* ============================================================
+     TIL (UZ / RU) — sahifadagi matnlar data-ru atributlari orqali
+     almashtiriladi. O'zbekcha matn asl (standart) matn hisoblanadi.
+     ============================================================ */
+  const UI = {
+    uz: {
+      sending: "Yuborilmoqda...",
+      gateSubmit: "Ariza yuborish va saytga kirish",
+      bookSubmit: "Buyurtma yuborish",
+      gateErr: "Xatolik: ariza yuborilmadi. Iltimos, to'g'ridan-to'g'ri +998 99 608 78 86 raqamiga qo'ng'iroq qiling.",
+      bookErr: "Xatolik: buyurtma yuborilmadi. Iltimos, to'g'ridan-to'g'ri +998 99 608 78 86 raqamiga qo'ng'iroq qiling yoki @Smart_steps_admin ga yozing.",
+      title: "Ustoz Smart Steps Learning Center — Marg'ilon"
+    },
+    en: {
+      sending: "Sending...",
+      gateSubmit: "Submit application and enter the site",
+      bookSubmit: "Place order",
+      gateErr: "Error: the application was not sent. Please call +998 99 608 78 86 directly.",
+      bookErr: "Error: the order was not sent. Please call +998 99 608 78 86 directly or message @Smart_steps_admin.",
+      title: "Ustoz Smart Steps Learning Center — Margilan"
+    },
+    ru: {
+      sending: "Отправка...",
+      gateSubmit: "Отправить заявку и перейти на сайт",
+      bookSubmit: "Отправить заказ",
+      gateErr: "Ошибка: заявка не отправлена. Пожалуйста, позвоните по номеру +998 99 608 78 86.",
+      bookErr: "Ошибка: заказ не отправлен. Пожалуйста, позвоните по номеру +998 99 608 78 86 или напишите @Smart_steps_admin.",
+      title: "Ustoz Smart Steps Learning Center — Маргилан"
+    }
+  };
+  let currentLang = 'uz';
+
+  // Asl (o'zbekcha) matnlarni eslab qolamiz
+  document.querySelectorAll('[data-ru]').forEach(el => { el.dataset.uz = el.textContent; });
+  document.querySelectorAll('[data-ru-html]').forEach(el => { el.dataset.uzHtml = el.innerHTML; });
+  document.querySelectorAll('[data-ph-ru]').forEach(el => { el.dataset.phUz = el.getAttribute('placeholder'); });
+  document.querySelectorAll('[data-aria-ru]').forEach(el => { el.dataset.ariaUz = el.getAttribute('aria-label'); });
+  document.querySelectorAll('[data-label-ru]').forEach(el => { el.dataset.labelUz = el.getAttribute('label'); });
+
+  const LANGS = ['uz', 'ru', 'en'];
+
+  function applyLang(lang){
+    currentLang = lang;
+    const pick = (el, ruAttr, enAttr, uzVal) => lang === 'ru' ? el.getAttribute(ruAttr) : (lang === 'en' ? el.getAttribute(enAttr) : uzVal);
+    document.documentElement.lang = lang;
+    document.title = UI[lang].title;
+    document.querySelectorAll('[data-ru]').forEach(el => { el.textContent = pick(el, 'data-ru', 'data-en', el.dataset.uz); });
+    document.querySelectorAll('[data-ru-html]').forEach(el => { el.innerHTML = pick(el, 'data-ru-html', 'data-en-html', el.dataset.uzHtml); });
+    document.querySelectorAll('[data-ph-ru]').forEach(el => { el.setAttribute('placeholder', pick(el, 'data-ph-ru', 'data-ph-en', el.dataset.phUz)); });
+    document.querySelectorAll('[data-aria-ru]').forEach(el => { el.setAttribute('aria-label', pick(el, 'data-aria-ru', 'data-aria-en', el.dataset.ariaUz)); });
+    document.querySelectorAll('[data-label-ru]').forEach(el => { el.setAttribute('label', pick(el, 'data-label-ru', 'data-label-en', el.dataset.labelUz)); });
+    document.querySelectorAll('.lang-switch button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    try{ localStorage.setItem('ustoz_lang', lang); }catch(e){}
+  }
+
+  document.querySelectorAll('.lang-switch button').forEach(b => {
+    b.addEventListener('click', () => applyLang(b.dataset.lang));
+  });
+
+  (function initLang(){
+    let saved = null;
+    try{ saved = localStorage.getItem('ustoz_lang'); }catch(e){}
+    const fromUrl = new URLSearchParams(location.search).get('lang');
+    const lang = LANGS.includes(fromUrl) ? fromUrl : (LANGS.includes(saved) ? saved : 'uz');
+    applyLang(lang);
+  })();
+
+  /* ============================================================ */
+
+  const burger = document.getElementById('burgerBtn');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ============================================================
+     ARIZALARNI SAQLASH — kvdb.io
+     ============================================================ */
+  const KVDB_BUCKET_ID = "Pmd8pkkyyJnzhaJWwEEvh7";
+
+  /* ============================================================
+     TELEGRAM BOT XABARNOMASI
+     ============================================================ */
+  const TELEGRAM_BOT_TOKEN = "8999822563:AAEHlVWuE_PJGtGjQ5AfY3GcdrTNVSVDIQc";
+  const TELEGRAM_CHAT_ID   = "6828352779";
+
+  document.body.classList.add('gate-active');
+  const gateOverlay = document.getElementById('gateOverlay');
+  const gateForm = document.getElementById('gateForm');
+  const gateSuccess = document.getElementById('gateSuccess');
+  const gateSkip = document.getElementById('gateSkip');
+  const gateContinueBtn = document.getElementById('gateContinueBtn');
+  const gateSubmitBtn = document.getElementById('gateSubmitBtn');
+
+  function closeGate(){
+    gateOverlay.classList.add('gate-hidden');
+    document.body.classList.remove('gate-active');
+    setTimeout(() => { gateOverlay.style.display = 'none'; }, 400);
+  }
+
+  gateSkip.addEventListener('click', closeGate);
+  gateContinueBtn.addEventListener('click', closeGate);
+
+  async function kvAppend(key, entry){
+    if(KVDB_BUCKET_ID === "PASTE_BUCKET_ID_HERE"){
+      console.warn("KVDB_BUCKET_ID sozlanmagan:", entry);
+      return false;
+    }
+    try{
+      let list = [];
+      const getRes = await fetch(`https://kvdb.io/${KVDB_BUCKET_ID}/${key}?format=json`);
+      if(getRes.ok){
+        list = await getRes.json();
+        if(!Array.isArray(list)) list = [];
+      }
+      list.push(entry);
+      const putRes = await fetch(`https://kvdb.io/${KVDB_BUCKET_ID}/${key}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(list)
+      });
+      if(!putRes.ok){
+        console.error("Saqlashda xatolik: HTTP", putRes.status);
+        return false;
+      }
+      return true;
+    }catch(err){
+      console.error("Saqlashda xatolik:", err);
+      return false;
+    }
+  }
+
+  async function tgSend(text){
+    if(TELEGRAM_BOT_TOKEN === "PASTE_BOT_TOKEN_HERE" || TELEGRAM_CHAT_ID === "PASTE_CHAT_ID_HERE"){
+      console.warn("Telegram BOT_TOKEN / CHAT_ID sozlanmagan.");
+      return false;
+    }
+    try{
+      const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
+      });
+      if(!res.ok){
+        console.error("Telegramga yuborishda xatolik: HTTP", res.status);
+        return false;
+      }
+      return true;
+    }catch(err){
+      console.error("Telegramga yuborishda xatolik:", err);
+      return false;
+    }
+  }
+
+  // Adminga xabar doim o'zbekcha ketadi (formadagi value atributlari o'zbekcha),
+  // qo'shimcha ravishda mijoz saytni qaysi tilda ko'rayotgani yoziladi.
+  const langLabel = () => ({ru:'Русский (RU)', en:'English (EN)', uz:"O'zbekcha (UZ)"})[currentLang];
+  const sanaStr = (iso) => new Date(iso).toLocaleString('uz-UZ');
+
+  const saveApplication = (entry) => kvAppend('arizalar', entry);
+  const sendToTelegram = (entry) => tgSend(
+`🆕 Yangi ariza — Ustoz Smart Steps
+
+👤 Ism: ${entry.ism}
+🎂 Yosh: ${entry.yosh}
+📞 Telefon: ${entry.telefon}
+📚 Yo'nalish: ${entry.yonalish}
+⏰ Guruh/vaqt: ${entry.vaqt}
+🌐 Sayt tili: ${entry.til}
+📅 Sana: ${sanaStr(entry.sana)}`);
+
+  const saveBookOrder = (entry) => kvAppend('kitob_buyurtmalar', entry);
+  const sendBookOrderToTelegram = (entry) => tgSend(
+`📚 Yangi kitob buyurtmasi — Ustoz Smart Steps
+
+👤 Ism: ${entry.ism}
+📞 Telefon: ${entry.telefon}
+📖 Kitob: ${entry.kitob}
+🔢 Soni: ${entry.soni} dona
+🌐 Sayt tili: ${entry.til}
+📅 Sana: ${sanaStr(entry.sana)}`);
+
+  const bookOrderForm = document.getElementById('bookOrderForm');
+  const bookOrderSubmitBtn = document.getElementById('bookOrderSubmitBtn');
+  const bookOrderSuccess = document.getElementById('bookOrderSuccess');
+  const bookOrderErrorBox = document.getElementById('bookOrderErrorBox');
+
+  bookOrderForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    bookOrderSubmitBtn.disabled = true;
+    bookOrderSubmitBtn.textContent = UI[currentLang].sending;
+    bookOrderErrorBox.style.display = 'none';
+
+    const entry = {
+      ism: document.getElementById('b_name').value.trim(),
+      telefon: document.getElementById('b_phone').value.trim(),
+      kitob: document.getElementById('b_book').value,
+      soni: document.getElementById('b_qty').value,
+      til: langLabel(),
+      sana: new Date().toISOString()
+    };
+
+    const [kvdbResult, tgResult] = await Promise.allSettled([
+      saveBookOrder(entry),
+      sendBookOrderToTelegram(entry)
+    ]);
+    const ok = (kvdbResult.status === 'fulfilled' && kvdbResult.value) ||
+               (tgResult.status === 'fulfilled' && tgResult.value);
+
+    if(ok){
+      bookOrderForm.style.display = 'none';
+      bookOrderSuccess.style.display = 'block';
+    } else {
+      bookOrderSubmitBtn.disabled = false;
+      bookOrderSubmitBtn.textContent = UI[currentLang].bookSubmit;
+      bookOrderErrorBox.style.display = 'block';
+      bookOrderErrorBox.textContent = UI[currentLang].bookErr;
+    }
+  });
+
+  gateForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    gateSubmitBtn.disabled = true;
+    gateSubmitBtn.textContent = UI[currentLang].sending;
+
+    const entry = {
+      ism: document.getElementById('g_name').value.trim(),
+      yosh: document.getElementById('g_age').value,
+      telefon: document.getElementById('g_phone').value.trim(),
+      yonalish: document.getElementById('g_direction').value,
+      vaqt: document.getElementById('g_time').value,
+      til: langLabel(),
+      sana: new Date().toISOString()
+    };
+
+    const [kvdbResult, tgResult] = await Promise.allSettled([
+      saveApplication(entry),
+      sendToTelegram(entry)
+    ]);
+    const ok = (kvdbResult.status === 'fulfilled' && kvdbResult.value) ||
+               (tgResult.status === 'fulfilled' && tgResult.value);
+
+    if(ok){
+      gateForm.style.display = 'none';
+      gateSuccess.style.display = 'block';
+    } else {
+      gateSubmitBtn.disabled = false;
+      gateSubmitBtn.textContent = UI[currentLang].gateSubmit;
+      let errBox = document.getElementById('gateErrorBox');
+      if(!errBox){
+        errBox = document.createElement('p');
+        errBox.id = 'gateErrorBox';
+        errBox.style.cssText = 'color:#a8202f; font-size:0.85rem; margin-top:0.8rem; text-align:center; line-height:1.5;';
+        gateForm.appendChild(errBox);
+      }
+      errBox.textContent = UI[currentLang].gateErr;
+    }
+  });
+</script>
+
+</body>
+</html>
